@@ -1,24 +1,84 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13122.16" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="21507" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+    <device id="retina6_12" orientation="portrait" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13104.12"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21505"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--View Controller-->
+        <!--Notes View Controller-->
         <scene sceneID="tne-QT-ifu">
             <objects>
-                <viewController id="BYZ-38-t0r" customClass="ViewController" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="NotesViewController" id="BYZ-38-t0r" customClass="NotesViewController" customModule="Notes" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" xcode11CocoaTouchSystemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <subviews>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="insetGrouped" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="18" estimatedSectionHeaderHeight="-1" sectionFooterHeight="18" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="Ss2-ii-ctR">
+                                <rect key="frame" x="0.0" y="59" width="393" height="710"/>
+                                <color key="backgroundColor" systemColor="systemGray6Color"/>
+                                <color key="sectionIndexColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            </tableView>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="RSf-bM-y6a">
+                                <rect key="frame" x="0.0" y="769" width="393" height="49"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="8 заметок" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="R0k-dG-aN9">
+                                        <rect key="frame" x="167" y="17.333333333333371" width="59.333333333333343" height="14.333333333333336"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bYy-Wm-iI5">
+                                        <rect key="frame" x="326" y="4.6666666666666288" width="51" height="40"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="40" id="aaS-5b-i1W"/>
+                                        </constraints>
+                                        <color key="tintColor" red="0.8901960784313725" green="0.70980392156862748" blue="0.12549019607843137" alpha="1" colorSpace="calibratedRGB"/>
+                                        <state key="normal" title="Button"/>
+                                        <buttonConfiguration key="configuration" style="plain" image="square.and.pencil" catalog="system"/>
+                                    </button>
+                                </subviews>
+                                <color key="backgroundColor" systemColor="systemGray6Color"/>
+                                <color key="tintColor" red="0.0" green="0.0" blue="0.0" alpha="0.5" colorSpace="custom" customColorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstItem="bYy-Wm-iI5" firstAttribute="centerY" secondItem="RSf-bM-y6a" secondAttribute="centerY" id="Fum-G3-OS6"/>
+                                    <constraint firstItem="R0k-dG-aN9" firstAttribute="centerX" secondItem="RSf-bM-y6a" secondAttribute="centerX" id="MJ3-OK-Vae"/>
+                                    <constraint firstItem="R0k-dG-aN9" firstAttribute="centerY" secondItem="RSf-bM-y6a" secondAttribute="centerY" id="e6m-ja-a1w"/>
+                                    <constraint firstAttribute="trailing" secondItem="bYy-Wm-iI5" secondAttribute="trailing" constant="16" id="ep9-GE-MBF"/>
+                                    <constraint firstAttribute="height" constant="49" id="uji-dM-m68"/>
+                                </constraints>
+                            </view>
+                        </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
+                        <color key="backgroundColor" systemColor="systemGray6Color"/>
+                        <constraints>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="Ss2-ii-ctR" secondAttribute="trailing" id="4Sk-de-tnU"/>
+                            <constraint firstItem="RSf-bM-y6a" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="A4y-P3-My3"/>
+                            <constraint firstItem="Ss2-ii-ctR" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="Ouo-1R-pRI"/>
+                            <constraint firstItem="Ss2-ii-ctR" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="gFz-J1-ZoR"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="RSf-bM-y6a" secondAttribute="trailing" id="hyB-Wa-34e"/>
+                            <constraint firstItem="RSf-bM-y6a" firstAttribute="top" secondItem="Ss2-ii-ctR" secondAttribute="bottom" id="i80-2s-bGn"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="RSf-bM-y6a" secondAttribute="bottom" id="uba-Q9-iU0"/>
+                        </constraints>
                     </view>
+                    <connections>
+                        <outlet property="addNoteButton" destination="bYy-Wm-iI5" id="O9Q-Bb-eao"/>
+                        <outlet property="countLabel" destination="R0k-dG-aN9" id="aeM-gM-ad7"/>
+                        <outlet property="tableView" destination="Ss2-ii-ctR" id="xnC-PB-f9k"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
+            <point key="canvasLocation" x="138" y="4"/>
         </scene>
     </scenes>
+    <color key="tintColor" red="0.8901960784313725" green="0.70980392156862748" blue="0.12549019607843137" alpha="1" colorSpace="calibratedRGB"/>
+    <resources>
+        <image name="square.and.pencil" catalog="system" width="128" height="113"/>
+        <systemColor name="systemGray6Color">
+            <color red="0.94901960784313721" green="0.94901960784313721" blue="0.96862745098039216" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+    </resources>
 </document>
