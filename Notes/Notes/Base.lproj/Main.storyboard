@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="21507" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="21507" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="Pbq-2G-OOn">
     <device id="retina6_12" orientation="portrait" appearance="light"/>
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21505"/>
@@ -8,7 +8,23 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--Notes View Controller-->
+        <!--Navigation Controller-->
+        <scene sceneID="Is3-sb-SK1">
+            <objects>
+                <navigationController id="Pbq-2G-OOn" sceneMemberID="viewController">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="AR0-08-6Ym">
+                        <rect key="frame" x="0.0" y="59" width="393" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="BYZ-38-t0r" kind="relationship" relationship="rootViewController" id="XKm-Pg-WCj"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="k3N-cz-SMD" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-1682" y="27"/>
+        </scene>
+        <!--Notes-->
         <scene sceneID="tne-QT-ifu">
             <objects>
                 <viewController storyboardIdentifier="NotesViewController" id="BYZ-38-t0r" customClass="NotesViewController" customModule="Notes" customModuleProvider="target" sceneMemberID="viewController">
@@ -16,8 +32,8 @@
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="insetGrouped" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="18" estimatedSectionHeaderHeight="-1" sectionFooterHeight="18" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="Ss2-ii-ctR">
-                                <rect key="frame" x="0.0" y="59" width="393" height="710"/>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="insetGrouped" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="32" estimatedSectionHeaderHeight="-1" sectionFooterHeight="32" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="Ss2-ii-ctR">
+                                <rect key="frame" x="0.0" y="103" width="393" height="666"/>
                                 <color key="backgroundColor" systemColor="systemGray6Color"/>
                                 <color key="sectionIndexColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </tableView>
@@ -56,13 +72,14 @@
                         <constraints>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="Ss2-ii-ctR" secondAttribute="trailing" id="4Sk-de-tnU"/>
                             <constraint firstItem="RSf-bM-y6a" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="A4y-P3-My3"/>
-                            <constraint firstItem="Ss2-ii-ctR" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="Ouo-1R-pRI"/>
                             <constraint firstItem="Ss2-ii-ctR" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="gFz-J1-ZoR"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="RSf-bM-y6a" secondAttribute="trailing" id="hyB-Wa-34e"/>
                             <constraint firstItem="RSf-bM-y6a" firstAttribute="top" secondItem="Ss2-ii-ctR" secondAttribute="bottom" id="i80-2s-bGn"/>
+                            <constraint firstItem="Ss2-ii-ctR" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="r5y-0d-Srk"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="RSf-bM-y6a" secondAttribute="bottom" id="uba-Q9-iU0"/>
                         </constraints>
                     </view>
+                    <navigationItem key="navigationItem" title="Notes" id="j0j-Ac-QZn"/>
                     <connections>
                         <outlet property="addNoteButton" destination="bYy-Wm-iI5" id="O9Q-Bb-eao"/>
                         <outlet property="countLabel" destination="R0k-dG-aN9" id="aeM-gM-ad7"/>
@@ -71,7 +88,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="138" y="4"/>
+            <point key="canvasLocation" x="-833" y="27"/>
         </scene>
     </scenes>
     <color key="tintColor" red="0.8901960784313725" green="0.70980392156862748" blue="0.12549019607843137" alpha="1" colorSpace="calibratedRGB"/>

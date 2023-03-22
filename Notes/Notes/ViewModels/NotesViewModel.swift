@@ -11,8 +11,15 @@ import RxCocoa
 import RxDataSources
 
 class NotesViewModel {
+    private let disposeBag = DisposeBag()
     var notes = BehaviorSubject(value: [SectionModel(model: "", items: [Note]())])
-    
+    var countNotes = BehaviorRelay<String?>(value: nil)
+
+    init() {
+        fetchNotes ()
+        countNotes.accept(getCountNotes())
+    }
+
     func fetchNotes () {
         //TODO notes
         let sectionFirst = SectionModel(model: "First Section", items: [
@@ -39,12 +46,22 @@ class NotesViewModel {
         self.notes.on(.next([sectionFirst, sectionSecond]))
     }
     
+    func getCountNotes() -> String{
+        var count : Int = 0
+        guard let sections = try? notes.value() else {return 0.notes()}
+        for item in sections {
+            count = count + item.items.count
+        }
+        return count.notes()
+    }
+    
     func addNote(note: Note){
         guard var sections = try? notes.value() else {return}
         var currentSection = sections[0]
         currentSection.items.insert(note, at: 0)
         sections[0] = currentSection
         self.notes.onNext(sections)
+        countNotes.accept(getCountNotes())
     }
     
     func deleteNote(indexPath: IndexPath) {
@@ -53,6 +70,7 @@ class NotesViewModel {
         currentSection.items.remove(at: indexPath.row)
         sections[indexPath.section] = currentSection
         self.notes.onNext(sections)
+        countNotes.accept(getCountNotes())
     }
     
     func editNote(title: String, indexPath: IndexPath) {

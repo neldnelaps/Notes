@@ -20,23 +20,25 @@ class NotesViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         title = "Notes"
-
         tableView.translatesAutoresizingMaskIntoConstraints = false
-        
         tableView.register(UINib(nibName: "NoteTableViewCell", bundle: nil), forCellReuseIdentifier: "NoteTableViewCell")
 
 //       let add = UIBarButtonItem(title: "Add", style: .done, target: self, action: #selector(onTapAdd))
 //       self.navigationItem.rightBarButtonItem = add
 
-        viewModel.fetchNotes()
         bindTableView()
+        bindText()
     }
     
     @objc func onTapAdd(){
         let note = Note(id: 45, title: "Новая заметка", description: "Нет дополнительного текста", time: "14:20")
         self.viewModel.addNote(note: note)
     }
-
+    
+    func bindText() {
+        viewModel.countNotes.bind(to: countLabel.rx.text).disposed(by: bag)
+    }
+    
     func bindTableView() {
         tableView.rx.setDelegate(self).disposed(by: bag)
         
@@ -54,7 +56,6 @@ class NotesViewController: UIViewController {
         tableView.rx.itemDeleted.subscribe(onNext: { [weak self] indexPath in
             guard let self = self else { return }
             self.viewModel.deleteNote(indexPath: indexPath)
-            
         })
         
         tableView.rx.itemSelected.subscribe(onNext: { indexPath in
