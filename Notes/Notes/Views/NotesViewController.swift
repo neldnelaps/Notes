@@ -23,18 +23,25 @@ class NotesViewController: UIViewController {
         tableView.translatesAutoresizingMaskIntoConstraints = false
         tableView.register(UINib(nibName: "NoteTableViewCell", bundle: nil), forCellReuseIdentifier: "NoteTableViewCell")
 
-//       let add = UIBarButtonItem(title: "Add", style: .done, target: self, action: #selector(onTapAdd))
-//       self.navigationItem.rightBarButtonItem = add
-
+        bindAction()
         bindTableView()
         bindText()
     }
     
-    @objc func onTapAdd(){
-        let note = Note(id: 45, title: "Новая заметка", description: "Нет дополнительного текста", time: "14:20")
-        self.viewModel.addNote(note: note)
+    func bindAction() {
+        addNoteButton.rx.tap.bind {
+            let today = Date()
+            let hours   = (Calendar.current.component(.hour, from: today))
+            let minutes = (Calendar.current.component(.minute, from: today))
+            print("\(hours):\(minutes)")
+            
+            let note = Note(id: 45, title: "Новая заметка", description: "Нет дополнительного текста", time: "\(hours):\(minutes)")
+            self.viewModel.addNote(note: note)
+            DispatchQueue.main.async {
+                self.show(NoteDetailsViewController(), sender: self)
+            }
+        }
     }
-    
     func bindText() {
         viewModel.countNotes.bind(to: countLabel.rx.text).disposed(by: bag)
     }
@@ -59,16 +66,20 @@ class NotesViewController: UIViewController {
         })
         
         tableView.rx.itemSelected.subscribe(onNext: { indexPath in
-            let alert = UIAlertController(title: "Note", message: "Edit Note", preferredStyle: .alert)
-            alert.addTextField { textField in
-                
-            }
-            alert.addAction(UIAlertAction(title: "Edit", style: .default, handler: { action in
-                let textField = alert.textFields![0] as UITextField
-                self.viewModel.editNote(title: textField.text ?? "", indexPath: indexPath)
-            }))
+//            let alert = UIAlertController(title: "Note", message: "Edit Note", preferredStyle: .alert)
+//            alert.addTextField { textField in
+//
+//            }
+//            alert.addAction(UIAlertAction(title: "Edit", style: .default, handler: { action in
+//                let textField = alert.textFields![0] as UITextField
+//                self.viewModel.editNote(title: textField.text ?? "", indexPath: indexPath)
+//            }))
+//            DispatchQueue.main.async {
+//                self.present(alert, animated: true, completion: nil)
+//            }
             DispatchQueue.main.async {
-                self.present(alert, animated: true, completion: nil)
+                var vc = NoteDetailsViewController()
+                self.show(NoteDetailsViewController(), sender: self)
             }
         }).disposed(by: bag)
     }
@@ -77,7 +88,8 @@ class NotesViewController: UIViewController {
 extension NotesViewController : UITableViewDelegate {
     func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int){
         let header = view as! UITableViewHeaderFooterView
-        header.textLabel?.font = UIFont.boldSystemFont(ofSize: 16)
-        header.textLabel?.textColor = .black
+        header.textLabel?.font = UIFont.boldSystemFont(ofSize: 18)
+        header.textLabel?.text =  header.textLabel?.text?.capitalized
+        header.textLabel?.textColor = UIColor.label
     }
 }
