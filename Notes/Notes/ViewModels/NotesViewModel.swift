@@ -32,9 +32,6 @@ class NotesViewModel {
 
     func fetchNotes () {
         notesArray = try! Realm().objects(Note.self).sorted(byKeyPath: "time").map({$0})
-        if notesArray.count == 0 {
-            return
-        }
         
         var sectionFirst = [Note]()
         var sectionSecond = [Note]()
@@ -59,8 +56,8 @@ class NotesViewModel {
     }
 
     func deleteNote(indexPath: IndexPath) {
-        var index: Int = getIndex(indexPath: indexPath)!
         do {
+            var index: Int = getIndex(indexPath: indexPath)!
             try realm.write {
                 realm.delete(notesArray[index])
                 notesArray.remove(at: index)

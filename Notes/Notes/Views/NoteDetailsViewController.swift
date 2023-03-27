@@ -58,6 +58,10 @@ class NoteDetailsViewController: UIViewController, UITextViewDelegate {
     
     func updateNote(){
         getTitleAndDepictionOfNote(textView.text ?? "")
+        if note.title == titleLines && note.depiction == depictionLines {
+            return
+        }
+        
         note.title = titleLines
         note.depiction = depictionLines
         if note.title.isEmpty && note.depiction.isEmpty {
@@ -90,7 +94,8 @@ class NoteDetailsViewController: UIViewController, UITextViewDelegate {
               // reset style of attributed text
               let currentSelectedRange = textView.selectedRange
               let attributedText = attributedText.string
-              let regularStyle = [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 16)]
+              let regularStyle = [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 16),
+                                  NSAttributedString.Key.foregroundColor : UIColor.label]
               let attributedString = NSMutableAttributedString(string: attributedText, attributes: regularStyle)
               textView.attributedText = attributedString
               
@@ -102,7 +107,8 @@ class NoteDetailsViewController: UIViewController, UITextViewDelegate {
               let range = NSRange(location: 0, length: firstLine.count)
               
               let attributeOfBold = [
-                NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 30)
+                NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 30),
+                NSAttributedString.Key.foregroundColor : UIColor.label
               ]
               
               attributedString.addAttributes(attributeOfBold, range: range)
