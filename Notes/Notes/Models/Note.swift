@@ -5,11 +5,15 @@
 //  Created by Natalia Pashkova on 21.03.2023.
 //
 
-import Foundation
+import RealmSwift
 
-struct Note{
-    var id: Int
-    var title : String
-    var description : String
-    var time : String
+class Note : Object{
+    @Persisted var id: String = UUID().uuidString
+    @Persisted var title : String
+    @Persisted var depiction : String
+    @Persisted var time : Date
+    
+    override static func primaryKey() -> String? {
+        return "id"
+    }
 }

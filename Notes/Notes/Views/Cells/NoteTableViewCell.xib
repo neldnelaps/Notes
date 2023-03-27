@@ -56,9 +56,9 @@
             <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>
             <color key="backgroundColor" systemColor="secondarySystemGroupedBackgroundColor"/>
             <connections>
-                <outlet property="descriptionLabel" destination="BeW-cs-GMc" id="53z-Cm-pvw"/>
+                <outlet property="depictionLabel" destination="BeW-cs-GMc" id="3kS-Sw-JjO"/>
                 <outlet property="timeLabel" destination="YOJ-mY-bIF" id="OZC-wq-WEK"/>
-                <outlet property="titleLabel" destination="YOJ-mY-bIF" id="Rqg-gl-uGk"/>
+                <outlet property="titleLabel" destination="e2W-23-KDB" id="fEZ-Vx-0FK"/>
             </connections>
             <point key="canvasLocation" x="130" y="21"/>
         </tableViewCell>

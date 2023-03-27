@@ -9,75 +9,93 @@ import Foundation
 import RxSwift
 import RxCocoa
 import RxDataSources
+import RealmSwift
 
 class NotesViewModel {
     private let disposeBag = DisposeBag()
-    var notes = BehaviorSubject(value: [SectionModel(model: "", items: [Note]())])
+    var notesSection = BehaviorSubject(value: [SectionModel(model: "", items: [Note]())])
+    var notesArray : [Note]
     var countNotes = BehaviorRelay<String?>(value: nil)
-
+    
+    var token : NotificationToken?
+    let realm = try! Realm()
+    
     init() {
+        notesArray = [Note]()
         fetchNotes ()
-        countNotes.accept(getCountNotes())
+        countNotes.accept(notesArray.count.notes())
+        token = realm.observe({[weak self] _, realm in
+            self?.fetchNotes()
+            self?.countNotes.accept(self?.notesArray.count.notes())
+        })
     }
 
     func fetchNotes () {
-        //TODO notes
-        let sectionFirst = SectionModel(model: "First Section", items: [
-            Note(id: 0, title: "Новая заметка", description: "Нет дополнительного текста", time: "14:20"),
-            Note(id: 1, title: "Новая заметка", description: "Нет дополнительного текста", time: "14/03/2023")])
-        let sectionSecond = SectionModel(model: "Second Section", items: [
-            Note(id: 0, title: "Новая заметка", description: "Нет дополнительного текста", time: "14:20"),
-            Note(id: 1, title: "Новая заметка", description: "Нет дополнительного текста", time: "14:20"),
-            Note(id: 2, title: "Новая заметка", description: "Нет дополнительного текста", time: "14/03/2023"),
-            Note(id: 3, title: "Новая заметка", description: "Нет дополнительного текста", time: "14/03/2023"),
-            Note(id: 4, title: "Новая заметка", description: "Нет дополнительного текста", time: "14:20"),
-            Note(id: 5, title: "Новая заметка", description: "Нет дополнительного текста", time: "14:20"),
-            Note(id: 6, title: "Новая заметка", description: "Нет дополнительного текста", time: "14:20"),
-            Note(id: 7, title: "Новая заметка", description: "Нет дополнительного текста", time: "14:20"),
-            Note(id: 8, title: "Новая заметка", description: "Нет дополнительного текста", time: "14/03/2023"),
-            Note(id: 9, title: "Новая заметка", description: "Нет дополнительного текста", time: "14:20"),
-            Note(id: 10, title: "Новая заметка", description: "Нет дополнительного текста", time: "14:20"),
-            Note(id: 11, title: "Новая заметка", description: "Нет дополнительного текста", time: "14:20"),
-            Note(id: 12, title: "Новая заметка", description: "Нет дополнительного текста", time: "14:20"),
-            Note(id: 13, title: "Новая заметка", description: "Нет дополнительного текста", time: "14/03/2023"),
-            Note(id: 14, title: "Новая заметка", description: "Нет дополнительного текста", time: "14:20"),
-            Note(id: 15, title: "Новая заметка", description: "Нет дополнительного текста", time: "14:20"),
-            Note(id: 16, title: "Новая заметка", description: "Нет дополнительного текста", time: "14/03/2023")])
-        self.notes.on(.next([sectionFirst, sectionSecond]))
-    }
-    
-    func getCountNotes() -> String{
-        var count : Int = 0
-        guard let sections = try? notes.value() else {return 0.notes()}
-        for item in sections {
-            count = count + item.items.count
+        notesArray = try! Realm().objects(Note.self).sorted(byKeyPath: "time").map({$0})
+        if notesArray.count == 0 {
+            return
         }
-        return count.notes()
+        
+        var sectionFirst = [Note]()
+        var sectionSecond = [Note]()
+        
+        for item in notesArray {
+            if Calendar.current.compare(Date(), to: item.time, toGranularity: .day) == ComparisonResult.orderedSame {
+                sectionFirst.insert(item, at: 0)
+            }
+            else {
+                sectionSecond.insert(item, at: 0)
+            }
+        }
+        
+        var sections = [SectionModel(model: "", items: [Note]())]
+        if sectionSecond.count != 0{
+            sections.insert(SectionModel(model: "Остальное", items: sectionSecond), at: 0)
+        }
+        if sectionFirst.count != 0{
+            sections.insert(SectionModel(model: "Cегодня", items: sectionFirst), at: 0)
+        }
+        self.notesSection.on(.next(sections))
     }
-    
-    func addNote(note: Note){
-        guard var sections = try? notes.value() else {return}
-        var currentSection = sections[0]
-        currentSection.items.insert(note, at: 0)
-        sections[0] = currentSection
-        self.notes.onNext(sections)
-        countNotes.accept(getCountNotes())
-    }
-    
+
     func deleteNote(indexPath: IndexPath) {
-        guard var sections = try? notes.value() else {return}
-        var currentSection = sections[indexPath.section]
-        currentSection.items.remove(at: indexPath.row)
-        sections[indexPath.section] = currentSection
-        self.notes.onNext(sections)
-        countNotes.accept(getCountNotes())
+        var index: Int = getIndex(indexPath: indexPath)!
+        do {
+            try realm.write {
+                realm.delete(notesArray[index])
+                notesArray.remove(at: index)
+            }
+        }
+        catch let error as NSError {
+            print("Error deleting note: \(error)")
+        }
     }
     
-    func editNote(title: String, indexPath: IndexPath) {
-        guard var sections = try? notes.value() else {return}
-        var currentSection = sections[indexPath.section]
-        currentSection.items[indexPath.row].title = title
-        sections[indexPath.section] = currentSection
-        self.notes.onNext(sections)
+    func editNote(note: Note, indexPath: IndexPath) {
+        var index: Int = getIndex(indexPath: indexPath)!
+        var noteNew = notesArray[index]
+        
+        do {
+            try realm.write {
+                noteNew.time =  note.time
+                noteNew.title =  note.title
+                noteNew.depiction =  note.depiction
+            }
+        }
+        catch let error as NSError {
+            print("Error edit note: \(error)")
+        }
+    }
+    
+    func getIndex(indexPath: IndexPath) -> Int? {
+        var index: Int
+        if indexPath.section == 0{
+            index = notesArray.count - indexPath.row - 1
+        }
+        else {
+            guard let sections = try? notesSection.value() else {return nil}
+            index = notesArray.count - (sections[0].items.count + indexPath.row) - 1
+        }
+        return index
     }
 }
