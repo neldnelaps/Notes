@@ -10,29 +10,61 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="NoteDetailsViewController" customModule="Notes" customModuleProvider="target">
             <connections>
+                <outlet property="scrollView" destination="er3-3T-gWA" id="b9q-wi-5b6"/>
                 <outlet property="textView" destination="qbp-R1-j5c" id="yV0-dj-hQ9"/>
+                <outlet property="textViewLayoutConstraint" destination="fsZ-de-cHQ" id="gdD-HD-K12"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>
         </placeholder>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
         <view clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="i5M-Pr-FkT">
             <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
-            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxX="YES" heightSizable="YES" flexibleMaxY="YES"/>
             <subviews>
-                <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="qbp-R1-j5c">
-                    <rect key="frame" x="16" y="74.999999999999972" width="361" height="383.33333333333326"/>
-                    <color key="backgroundColor" systemColor="secondarySystemGroupedBackgroundColor"/>
-                    <color key="textColor" systemColor="labelColor"/>
-                    <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
-                </textView>
+                <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" keyboardDismissMode="interactive" translatesAutoresizingMaskIntoConstraints="NO" id="er3-3T-gWA">
+                    <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                    <subviews>
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="vDs-Rb-yVF">
+                            <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                            <subviews>
+                                <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" scrollEnabled="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qbp-R1-j5c">
+                                    <rect key="frame" x="16" y="32" width="361" height="37"/>
+                                    <color key="backgroundColor" systemColor="secondarySystemGroupedBackgroundColor"/>
+                                    <constraints>
+                                        <constraint firstAttribute="height" constant="37" id="fsZ-de-cHQ"/>
+                                    </constraints>
+                                    <color key="textColor" systemColor="labelColor"/>
+                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                    <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                                </textView>
+                            </subviews>
+                            <constraints>
+                                <constraint firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="qbp-R1-j5c" secondAttribute="bottom" constant="32" id="I3s-WA-59Z"/>
+                                <constraint firstItem="qbp-R1-j5c" firstAttribute="leading" secondItem="vDs-Rb-yVF" secondAttribute="leading" constant="16" id="SOC-g4-UJk"/>
+                                <constraint firstItem="qbp-R1-j5c" firstAttribute="top" secondItem="vDs-Rb-yVF" secondAttribute="top" constant="32" id="XzF-GO-J1v"/>
+                                <constraint firstAttribute="trailing" secondItem="qbp-R1-j5c" secondAttribute="trailing" constant="16" id="lql-kH-pjh"/>
+                            </constraints>
+                        </view>
+                    </subviews>
+                    <constraints>
+                        <constraint firstAttribute="bottom" secondItem="vDs-Rb-yVF" secondAttribute="bottom" id="0QZ-OM-qU1"/>
+                        <constraint firstAttribute="trailing" secondItem="vDs-Rb-yVF" secondAttribute="trailing" id="UT8-1m-ldi"/>
+                        <constraint firstItem="vDs-Rb-yVF" firstAttribute="leading" secondItem="er3-3T-gWA" secondAttribute="leading" id="VYg-y6-WGB"/>
+                        <constraint firstItem="vDs-Rb-yVF" firstAttribute="top" secondItem="er3-3T-gWA" secondAttribute="top" id="el0-gJ-dW6"/>
+                    </constraints>
+                    <viewLayoutGuide key="contentLayoutGuide" id="0qH-Wt-ddq"/>
+                    <viewLayoutGuide key="frameLayoutGuide" id="qPg-Le-SOC"/>
+                </scrollView>
             </subviews>
             <viewLayoutGuide key="safeArea" id="fnl-2z-Ty3"/>
             <color key="backgroundColor" systemColor="systemGroupedBackgroundColor"/>
             <constraints>
-                <constraint firstItem="qbp-R1-j5c" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" constant="16" id="08n-hI-hoD"/>
-                <constraint firstItem="fnl-2z-Ty3" firstAttribute="trailing" secondItem="qbp-R1-j5c" secondAttribute="trailing" constant="16" id="fEA-UO-qPX"/>
-                <constraint firstItem="qbp-R1-j5c" firstAttribute="top" secondItem="fnl-2z-Ty3" secondAttribute="top" constant="16" id="teo-7S-beh"/>
-                <constraint firstItem="qbp-R1-j5c" firstAttribute="height" secondItem="i5M-Pr-FkT" secondAttribute="height" multiplier="0.45" id="twy-LZ-UUr"/>
+                <constraint firstItem="vDs-Rb-yVF" firstAttribute="width" secondItem="i5M-Pr-FkT" secondAttribute="width" id="2wm-bv-dDP"/>
+                <constraint firstAttribute="trailing" secondItem="er3-3T-gWA" secondAttribute="trailing" id="Lyu-Nj-EMO"/>
+                <constraint firstAttribute="bottom" secondItem="er3-3T-gWA" secondAttribute="bottom" id="T5N-hy-BWZ"/>
+                <constraint firstItem="er3-3T-gWA" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="WmR-a5-q5D"/>
+                <constraint firstItem="er3-3T-gWA" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="ouI-gP-jOE"/>
+                <constraint firstItem="vDs-Rb-yVF" firstAttribute="height" secondItem="i5M-Pr-FkT" secondAttribute="height" priority="250" id="vGy-lo-SKq"/>
             </constraints>
             <point key="canvasLocation" x="27" y="20"/>
         </view>

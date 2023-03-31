@@ -16,37 +16,27 @@ class NoteDetailsViewController: UIViewController, UITextViewDelegate {
     var delegate : UpdateNoteDelegate?
     
     @IBOutlet weak var textView: UITextView!
-    private var firstLineRange = NSRange()
     private var attributedText = NSAttributedString()
-    let maximumCharsOfNoteTitle = 20
+
+    @IBOutlet weak var scrollView: UIScrollView!
+    @IBOutlet weak var textViewLayoutConstraint: NSLayoutConstraint!
     
     var titleLines : String = ""
     var depictionLines : String = ""
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        NotificationCenter.default.addObserver(
-            self,
-            selector: #selector(keyboardWillShow),
-            name: UIResponder.keyboardWillShowNotification,
-            object: nil
-        )
-        
-        NotificationCenter.default.addObserver(
-            self,
-            selector: #selector(keyboardWillShow),
-            name: UIResponder.keyboardWillHideNotification,
-            object: nil
-        )
-        
+        registerKeyboardNotifications()
         textView.delegate = self
         textView.layer.cornerRadius = 12
-
+        
         if note.title.isEmpty && note.depiction.isEmpty {
             return
         }
         textView.text = "\(note.title)\n\(note.depiction)"
+        textView.clipsToBounds = false
         boldFirstLineOfNote()
+        textViewSizeThatFits()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -54,6 +44,7 @@ class NoteDetailsViewController: UIViewController, UITextViewDelegate {
         if self.isMovingFromParent {
             updateNote()
         }
+        NotificationCenter.default.removeObserver(self)
     }
     
     func updateNote(){
@@ -78,11 +69,11 @@ class NoteDetailsViewController: UIViewController, UITextViewDelegate {
     }
     
     func textViewDidChange(_ textView: UITextView) {
-
-        boldFirstLineOfNote()
-        let fixedWidth = textView.frame.size.width
-        let newSize = textView.sizeThatFits(CGSize(width: fixedWidth, height: CGFloat.greatestFiniteMagnitude))
-        textView.frame.size = CGSize(width: max(newSize.width, fixedWidth), height: newSize.height)
+        textViewSizeThatFits()
+    }
+    
+    func textViewSizeThatFits() {
+        self.textViewLayoutConstraint.constant = self.textView.sizeThatFits(CGSize(width: self.textView.frame.size.width, height: CGFloat.greatestFiniteMagnitude)).height
     }
     
     private func boldFirstLineOfNote() {
@@ -91,7 +82,6 @@ class NoteDetailsViewController: UIViewController, UITextViewDelegate {
           if attributedText != newAttributedText {
               attributedText = newAttributedText
 
-              // reset style of attributed text
               let currentSelectedRange = textView.selectedRange
               let attributedText = attributedText.string
               let regularStyle = [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 16),
@@ -99,7 +89,6 @@ class NoteDetailsViewController: UIViewController, UITextViewDelegate {
               let attributedString = NSMutableAttributedString(string: attributedText, attributes: regularStyle)
               textView.attributedText = attributedString
               
-              // bold it
               let textNote = textView.text ?? ""
               let lineBreakIndex = textNote.firstIndex(of: "\n") ?? textNote.endIndex
               let firstLine = String(textNote[..<lineBreakIndex])
@@ -121,27 +110,36 @@ class NoteDetailsViewController: UIViewController, UITextViewDelegate {
     private func getTitleAndDepictionOfNote(_ text: String){
         let firstLine = text.components(separatedBy: "\n")[0]
         titleLines = firstLine
+        boldFirstLineOfNote()
         depictionLines = textView.text.substring(from: titleLines.endIndex).trimmingCharacters(in: .whitespacesAndNewlines)
     }
     
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        textView.resignFirstResponder()
+    func registerKeyboardNotifications() {
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(keyboardWillShow(notification:)),
+            name: UIResponder.keyboardWillShowNotification,
+            object: nil)
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(keyboardWillHide(notification:)),
+            name: UIResponder.keyboardWillHideNotification,
+            object: nil)
     }
     
-    @objc func keyboardWillShow(_ notification: Notification) {
-        if let keyboardFrame: NSValue = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue {
-            let keyboardRectangle = keyboardFrame.cgRectValue
-            let keyboardHeight = keyboardRectangle.height
-            
-            if notification.name == UIResponder.keyboardWillHideNotification {
-                textView.contentInset = UIEdgeInsets.zero
-            }
-            else {
-                textView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: keyboardHeight, right: 0)
-                textView.scrollIndicatorInsets = textView.contentInset
-            }
-        }
-        textView.scrollRangeToVisible(textView.selectedRange)
+    @objc func keyboardWillShow(notification: NSNotification) {
+        guard let keyboardValue = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue else { return }
+        let keyboardScreenEndFrame = keyboardValue.cgRectValue
+        let keyboardViewEndFrame = view.convert(keyboardScreenEndFrame, from: view.window)
+
+        let contentInsets = UIEdgeInsets(top: 0, left: 0, bottom: keyboardViewEndFrame.height - view.safeAreaInsets.bottom, right: 0)
+        scrollView.contentInset = contentInsets
+        scrollView.scrollIndicatorInsets = contentInsets
+    }
+
+    @objc func keyboardWillHide(notification: NSNotification) {
+        scrollView.contentInset = .zero
+        scrollView.scrollIndicatorInsets = .zero
     }
 }
 
